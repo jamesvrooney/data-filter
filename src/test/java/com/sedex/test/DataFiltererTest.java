@@ -5,9 +5,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.Reader;
-import java.util.Collection;
-import java.util.Collections;
 
 import static org.junit.Assert.assertTrue;
 
