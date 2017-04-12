@@ -14,6 +14,7 @@ public class DataFiltererTest {
         assertTrue(DataFilterer.filterByCountry(openFile("src/test/resources/empty"), "GB").isEmpty());
     }
 
+
     private FileReader openFile(String filename) throws FileNotFoundException {
         return new FileReader(new File(filename));
     }
