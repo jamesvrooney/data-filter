@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Reader;
 import java.util.Collection;
 
 import static org.junit.Assert.assertThat;
@@ -32,16 +33,20 @@ public class DataFiltererTest {
         assertThat(logEntries.size(), is(expectedSize));
     }
 
-    /*@Test
+    @Test
     public void testFilterByCountryWithResponseTimeAboveLimit() throws FileNotFoundException {
         // given
         String filename = "src/test/resources/multi-lines";
         Reader source = openFile(filename);
-        String country = "GB";
-        int limit = 56;
+        String country = "US";
+        int limit = 750;    // milliseconds
 
-        assertTrue(!DataFilterer.filterByCountryWithResponseTimeAboveLimit(source, country, limit).isEmpty());
-    }*/
+        Collection<LogEntry> logEntries = DataFilterer.filterByCountryWithResponseTimeAboveLimit(source, country, limit);
+
+        int expectedSize = 2;
+
+        assertThat(logEntries.size(), is(expectedSize));
+    }
 
     /*@Test
     public void testFilterByCountryWithResponseTimeAboveAverage() throws FileNotFoundException {

@@ -6,12 +6,12 @@ package com.sedex.test;
 public class LogEntry {
     long requestTimstamp;
     String countryCode;
-    long response_time;
+    long responseTime;
 
-    public LogEntry(long requestTimstamp, String countryCode, long response_time) {
+    public LogEntry(long requestTimstamp, String countryCode, long responseTime) {
         this.requestTimstamp = requestTimstamp;
         this.countryCode = countryCode;
-        this.response_time = response_time;
+        this.responseTime = responseTime;
     }
 
     public long getRequestTimstamp() {
@@ -30,11 +30,11 @@ public class LogEntry {
         this.countryCode = countryCode;
     }
 
-    public long getResponse_time() {
-        return response_time;
+    public long getResponseTime() {
+        return responseTime;
     }
 
-    public void setResponse_time(long response_time) {
-        this.response_time = response_time;
+    public void setResponseTime(long responseTime) {
+        this.responseTime = responseTime;
     }
 }

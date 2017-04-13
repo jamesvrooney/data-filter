@@ -32,11 +32,40 @@ public class DataFilterer {
         }
 
         return logEntries;
+    }
 
+    public static Collection<LogEntry> filterByCountryWithResponseTimeAboveLimit(Reader source, String country, long limit) {
+        BufferedReader br = new BufferedReader(source);
+
+        List<LogEntry> logEntries = new ArrayList<>();
+
+        try {
+            // skip 1st line
+            br.readLine();
+
+            logEntries = br.lines()
+                    .map(convertLogEntryStringToObject)
+                    .filter(byCountry(country))
+                    .filter(byResponseTimeAboveLimit(limit))
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return logEntries;
+    }
+
+    public static Collection<?> filterByResponseTimeAboveAverage(Reader source) {
+        return Collections.emptyList();
     }
 
     private static Predicate<LogEntry> byCountry(String country) {
         return logEntry -> logEntry.getCountryCode().equals(country);
+    }
+
+    private static Predicate<LogEntry> byResponseTimeAboveLimit(long limit) {
+        return logEntry -> logEntry.getResponseTime() > limit;
     }
 
     private static Function<String, LogEntry> convertLogEntryStringToObject = line -> {
@@ -50,12 +79,4 @@ public class DataFilterer {
 
         return logEntry;
     };
-
-    public static Collection<?> filterByCountryWithResponseTimeAboveLimit(Reader source, String country, long limit) {
-        return Collections.emptyList();
-            }
-
-    public static Collection<?> filterByResponseTimeAboveAverage(Reader source) {
-        return Collections.emptyList();
-    }
 }
