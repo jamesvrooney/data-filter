@@ -48,14 +48,18 @@ public class DataFiltererTest {
         assertThat(logEntries.size(), is(expectedSize));
     }
 
-    /*@Test
-    public void testFilterByCountryWithResponseTimeAboveAverage() throws FileNotFoundException {
+    @Test
+    public void testFilterByResponseTimeAboveAverage() throws FileNotFoundException {
         // given
         String filename = "src/test/resources/multi-lines";
         Reader source = openFile(filename);
 
-        assertTrue(!DataFilterer.filterByResponseTimeAboveAverage(source).isEmpty());
-    }*/
+        Collection<LogEntry> logEntries = DataFilterer.filterByResponseTimeAboveAverage(source);
+
+        int expectedSize = 3;
+
+        assertThat(logEntries.size(), is(expectedSize));
+    }
 
     private FileReader openFile(String filename) throws FileNotFoundException {
         return new FileReader(new File(filename));

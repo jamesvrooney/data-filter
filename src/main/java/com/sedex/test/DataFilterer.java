@@ -2,10 +2,7 @@ package com.sedex.test;
 
 import java.io.BufferedReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -56,8 +53,33 @@ public class DataFilterer {
         return logEntries;
     }
 
-    public static Collection<?> filterByResponseTimeAboveAverage(Reader source) {
-        return Collections.emptyList();
+    public static Collection<LogEntry> filterByResponseTimeAboveAverage(Reader source) {
+        BufferedReader br = new BufferedReader(source);
+
+        List<LogEntry> logEntries = new ArrayList<>();
+        List<LogEntry> filteredLogEntries = new ArrayList<>();
+
+        try {
+            // skip 1st line
+            br.readLine();
+
+            logEntries = br.lines()
+                    .map(convertLogEntryStringToObject)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        OptionalDouble averageResponseTime = logEntries.stream().mapToLong(LogEntry::getResponseTime).average();
+
+        filteredLogEntries
+                = logEntries.stream()
+                .filter(byResponseTimeAboveAverage(averageResponseTime))
+                .collect(Collectors.toList());
+
+
+        return filteredLogEntries;
     }
 
     private static Predicate<LogEntry> byCountry(String country) {
@@ -66,6 +88,13 @@ public class DataFilterer {
 
     private static Predicate<LogEntry> byResponseTimeAboveLimit(long limit) {
         return logEntry -> logEntry.getResponseTime() > limit;
+    }
+
+    private static Predicate<LogEntry> byResponseTimeAboveAverage(OptionalDouble average) {
+
+        double averageResponseTime = average.getAsDouble();
+
+        return logEntry -> logEntry.getResponseTime() > averageResponseTime;
     }
 
     private static Function<String, LogEntry> convertLogEntryStringToObject = line -> {
