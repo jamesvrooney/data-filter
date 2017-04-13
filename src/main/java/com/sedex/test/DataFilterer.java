@@ -24,6 +24,7 @@ public class DataFilterer {
                     .filter(byCountry(country))
                     .collect(Collectors.toList());
 
+            logEntries.removeAll(Collections.singleton(null));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -46,6 +47,7 @@ public class DataFilterer {
                     .filter(byResponseTimeAboveLimit(limit))
                     .collect(Collectors.toList());
 
+            logEntries.removeAll(Collections.singleton(null));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -67,6 +69,7 @@ public class DataFilterer {
                     .map(convertLogEntryStringToObject)
                     .collect(Collectors.toList());
 
+            logEntries.removeAll(Collections.singleton(null));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -100,11 +103,21 @@ public class DataFilterer {
     private static Function<String, LogEntry> convertLogEntryStringToObject = line -> {
         String[] logValues = line.split(COMMA_SEPARATOR);
 
-        long requestTimstamp = Long.parseLong(logValues[0]);
-        String countryCode = logValues[1];
-        long responseTime = Long.parseLong(logValues[2]);
+        long requestTimstamp;
+        String countryCode;
+        long responseTime;
 
-        LogEntry logEntry = new LogEntry(requestTimstamp, countryCode, responseTime);
+        LogEntry logEntry = null;
+
+        try {
+            requestTimstamp = Long.parseLong(logValues[0]);
+            countryCode = logValues[1];
+            responseTime = Long.parseLong(logValues[2]);
+
+            logEntry = new LogEntry(requestTimstamp, countryCode, responseTime);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         return logEntry;
     };
