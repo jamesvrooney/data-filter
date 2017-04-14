@@ -31,6 +31,10 @@ public class DataFiltererTest {
         int expectedSize = 3;
 
         assertThat(logEntries.size(), is(expectedSize));
+
+        for (LogEntry logEntry: logEntries) {
+            assertTrue(logEntry.getCountryCode().equals(country));
+        }
     }
 
     @Test
@@ -46,6 +50,11 @@ public class DataFiltererTest {
         int expectedSize = 2;
 
         assertThat(logEntries.size(), is(expectedSize));
+
+        for (LogEntry logEntry: logEntries) {
+            assertTrue(logEntry.getCountryCode().equals(country));
+            assertTrue(logEntry.getResponseTime() > limit);
+        }
     }
 
     @Test
@@ -53,12 +62,17 @@ public class DataFiltererTest {
         // given
         String filename = "src/test/resources/multi-lines";
         Reader source = openFile(filename);
+        int averageResponseTime = 526;      // milliseconds
 
         Collection<LogEntry> logEntries = DataFilterer.filterByResponseTimeAboveAverage(source);
 
         int expectedSize = 3;
 
         assertThat(logEntries.size(), is(expectedSize));
+
+        for (LogEntry logEntry: logEntries) {
+            assertTrue(logEntry.getResponseTime() > averageResponseTime);
+        }
     }
 
     private FileReader openFile(String filename) throws FileNotFoundException {
